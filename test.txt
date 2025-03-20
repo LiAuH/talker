@@ -1,1 +1,1 @@
-潮汐守望者
+com.tencent.tmgp.cxswz/com.moba.unityplugin.MobaGameQuickSplashActivity
