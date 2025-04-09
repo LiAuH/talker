@@ -1,0 +1,47 @@
+./configure \
+   --target-os=android \
+   --arch=aarch64 \
+   --enable-cross-compile \
+   --enable-protocol=tcp \
+   --enable-parsers \
+   --enable-demuxers \
+   --enable-decoders \
+   --enable-pic \
+   --enable-shared \
+   --ar=/root/android-ndk-r26d/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ar \
+   --nm=/root/android-ndk-r26d/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-nm \
+   --ranlib=/root/android-ndk-r26d/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ranlib \
+   --strip=/root/android-ndk-r26d/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-strip \
+   --cc=/root/android-ndk-r26d/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android24-clang \
+   --sysroot=/root/android-ndk-r26d/toolchains/llvm/prebuilt/linux-x86_64/sysroot \
+   --extra-cflags="-fPIC -DANDROID" \
+   --extra-ldflags="-fPIC"
+
+   
+   
+export MIN_SDK_VERSION=24
+export TOOLCHAIN=/root/android-ndk-r26d/toolchains/llvm/prebuilt/linux-x86_64
+export TARGET_HOST=aarch64-linux-android
+export ANDROID_ARCH=arm64-v8a
+export AR=$TOOLCHAIN/bin/llvm-ar
+export CC=$TOOLCHAIN/bin/$TARGET_HOST$MIN_SDK_VERSION-clang
+export AS=$CC
+export CXX=$TOOLCHAIN/bin/$TARGET_HOST$MIN_SDK_VERSION-clang++
+export LD=$TOOLCHAIN/bin/ld
+export RANLIB=$TOOLCHAIN/bin/llvm-ranlib
+export STRIP=$TOOLCHAIN/bin/llvm-strip
+
+
+set TOOLCHAIN=${ANDROID_NDK_ROOT}/toolchains/llvm/prebuilt/linux-x86_64
+set AR=$TOOLCHAIN/bin/llvm-ar
+set CC=$TOOLCHAIN/bin/${TARGET}${ANDROID_TARGET_API}-clang
+set AS=$CC
+set CXX=$TOOLCHAIN/bin/${TARGET}${ANDROID_TARGET_API}-clang++
+set LD=$TOOLCHAIN/bin/ld
+set RANLIB=$TOOLCHAIN/bin/llvm-ranlib
+set STRIP=$TOOLCHAIN/bin/llvm-strip
+
+cmake -DCMAKE_TOOLCHAIN_FILE=${ANDROID_NDK_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=24 -DANDROID_PLATFORM=android-24
+
+
+
