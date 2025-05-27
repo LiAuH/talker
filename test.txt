@@ -16,3 +16,10 @@ adb shell dumpsys dropbox -p >db.txt
 adb pull /data/misc/perfetto-traces/trace .
 start .
 pause
+
+
+adb shell -tt su root /data/local/tmp/perfd/simpleperf_arm64 record -p com.tencent.mm --call-graph dwarf --trace-offcpu -o /data/local/tmp/simpleperf.trace -f 1000 -e cpu-clock --log-to-android-buffer
+adb shell simpleperf report-sample --protobuf --show-callchain -i /data/local/tmp/simpleperf.trace -o /data/local/tmp/as.trace
+adb pull /data/local/tmp/as.trace .
+start .
+pause
