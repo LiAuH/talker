@@ -23,3 +23,43 @@ adb shell simpleperf report-sample --protobuf --show-callchain -i /data/local/tm
 adb pull /data/local/tmp/as.trace .
 start .
 pause
+
+#include <stdio.h>
+#include <inttypes.h>
+#include <capstone/capstone.h>
+
+int main() {
+    csh handle;
+    cs_insn *insn;
+    size_t count;
+
+    // 初始化 Capstone，选择 ARM64 架构
+    if (cs_open(CS_ARCH_ARM64, CS_MODE_ARM, &handle) != CS_ERR_OK) {
+        printf("Failed to initialize Capstone\n");
+        return -1;
+    }
+
+    // 设置反汇编选项（可选）
+    cs_option(handle, CS_OPT_DETAIL, CS_OPT_ON);  // 启用详细模式（可获取寄存器、内存访问等信息）
+
+    // 要反汇编的二进制指令（ARM64 机器码）
+    uint8_t code[] = {
+        0x91, 0x00, 0x03, 0xe0,  // ADD X0, X0, X3
+        0x12, 0x80, 0x5f, 0xd6   // RET
+    };
+    size_t code_len = sizeof(code);
+
+    // 反汇编
+    count = cs_disasm(handle, code, code_len, 0x1000, 0, &insn);
+    if (count > 0) {
+        for (size_t i = 0; i < count; i++) {
+            printf("0x%" PRIx64 ":\t%s\t\t%s\n", insn[i].address, insn[i].mnemonic, insn[i].op_str);
+        }
+        cs_free(insn, count);  // 释放内存
+    } else {
+        printf("Failed to disassemble\n");
+    }
+
+    cs_close(&handle);  // 关闭 Capstone
+    return 0;
+}
