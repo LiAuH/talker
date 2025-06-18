@@ -1,0 +1,31 @@
+sudo modprobe nbd
+sudo qemu-nbd -c /dev/nbd0 system.vhd
+sudo gdisk /dev/nbd0
+sudo dd if=/dev/nbd0p7 of=super.img bs=4M status=progress
+sudo dd if=/dev/nbd0p1 of=bootloader.img bs=4M status=progress
+lpdump super.img
+lpunpack super.img super/
+truncate -s +50M system_a.img
+e2fsck -f system_a.img
+resize2fs system_a.img
+
+lpmake \
+	--group group_sys_a:3217031168 \
+	--group group_sys_b:3217031168 \
+    --metadata-size 65536 \
+	--metadata-slots 3 \
+    --super-name super \
+    --output super.img \
+	--device super:3242196992 \
+	--partition system_a:readonly:998596608:group_sys_a --image system_a=system_a.img \
+	--partition system_b:readonly:0:group_sys_b \
+	--partition vendor_a:readonly:296517632:group_sys_a --image vendor_a=vendor_a.img \
+	--partition vendor_b:readonly:0:group_sys_b \
+	--partition product_a:readonly:243855360:group_sys_a --image product_a=product_a.img \
+	--partition product_b:readonly:0:group_sys_b \
+	--partition odm_a:readonly:765952:group_sys_a --image odm_a=odm_a.img \
+	--partition odm_b:readonly:0:group_sys_b \
+	--virtual-ab
+
+sudo dd if=super-1.img of=/dev/nbd0p7 bs=4M status=progress
+sudo qemu-nbd -d /dev/nbd0
