@@ -1,3 +1,7 @@
 select t.name,count(t.name) as count from thread_state ts join thread t where ts.waker_utid=75 and ts.utid=t.utid and ts.ts>2729929481200 and ts.ts<2733937134100 group by t.name order by count
 
 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFmx97h0ei8Op9TSVWuJbO/yKAPboUV2AnhInxs5lPIN ap\bailli@qimengp-cwf03
+
+https://support.google.com/android/thread/29434011
+https://support.google.com/android/thread/197168903/how-do-you-legally-install-google-apps-on-custom-roms?hl=en
+https://support.google.com/googleplay/android-developer/thread/356167836/is-it-legal-to-install-google-apps-like-google-text-to-speech-in-non-gms-certified-devices?hl=en
